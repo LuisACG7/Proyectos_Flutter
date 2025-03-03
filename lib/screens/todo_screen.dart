@@ -1,3 +1,4 @@
+import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pmsn2025/database/task_databa.dart';
@@ -119,6 +120,28 @@ class _TodoScreenState extends State<TodoScreen> {
                   controller: conStatus,
                   decoration: InputDecoration(hintText: 'Estatus de la tarea'),
                 ),
+                Divider(),
+                ElevatedButton(
+                  onPressed: (){
+                    database!.INSERT('todo', {
+                      'titleTodo' : conTitle.text,
+                      'descTodo' : conDesc.text,
+                      'dateTodo' : conDate.text,
+                      'statusTodo' : conStatus.text == 1 ? true : false
+                    }).then((value) {
+                      if( value > 0) {
+                        ArtSweetAlert.show(
+                          context: context,
+                          artDialogArgs: ArtDialogArgs(
+                            type: ArtSweetAlertType.success,
+                            title: 'Mensaje de la App',
+                            text: 'Datos insertados correctamente'
+                          )
+                        );
+                      }
+                    },);
+                  },
+                  child: Text('Guardar'))
               ],
             ),
           ),
