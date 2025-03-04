@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pmsn2025/screens/catalog_screen.dart';
 import 'package:pmsn2025/screens/dashboard_screen.dart';
 import 'package:pmsn2025/screens/list_students_screen.dart';
 import 'package:pmsn2025/screens/splash_screen.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
             "/dash" : (context) => const DashboardScreen(),
             "/todo" : (context) => const TodoScreen(),
             "/welcome" : (context) => const WelcomeScreen(),
+            "/catalog" : (context) => const CatalogScreen(),
           },
           title: 'Material App',
           home: SplashScreen()

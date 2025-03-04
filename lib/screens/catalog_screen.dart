@@ -7,70 +7,104 @@ class CatalogScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF9F9F9),
+
       body: SafeArea(
         child: Column(
           children: [
-            _buildHeader(),      // Header de ubicación y búsqueda.
-            _buildPromoBanner(),  // Banner promocional.
-            _buildCategories(),   // Filtro de categorías.
-            Expanded(child: _buildProductGrid()), // Grid de productos.
+            _buildHeader(),
+            _buildPromoBanner(),
+            _buildCategories(),
+            Expanded(child: _buildProductGrid()),
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNavBar(), // Barra inferior.
+
+      bottomNavigationBar: _buildBottomNavBar(),
     );
   }
 
-  // Header: ubicación + barra de búsqueda + botón de filtro.
   Widget _buildHeader() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    return Container(
+      color: const Color(0xFF111111), // Fondo negro sólido para todo el header.
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
             "Location",
-            style: TextStyle(color: Colors.grey, fontSize: 12),
+            style: TextStyle(
+              fontSize: 12,
+              height: 14.4 / 12, 
+              fontFamily: 'Sora',
+              fontWeight: FontWeight.w400,
+              color: Color(0xFFA2A2A2), // Gris claro.
+              letterSpacing: 0.12,
+            ),
           ),
           const Text(
             "Bilzen, Tanjungbalai",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            style: TextStyle(
+              fontSize: 14,
+              height: 21 / 14,
+              fontFamily: 'Sora',
+              fontWeight: FontWeight.w600,
+              color: Color(0xFFD8D8D8), // Color blanco-gris claro.
+            ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           Row(
             children: [
               Expanded(
-                child: TextField(
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.search),
-                    hintText: "Search coffee",
-                    filled: true,
-                    fillColor: Colors.grey[200],
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
+                child: Container(
+                  height: 52,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF242424), // Fondo oscuro de la barra.
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.search, color: Color(0xFFA2A2A2)),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: TextField(
+                          style: const TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            hintText: "Search coffee",
+                            hintStyle: const TextStyle(color: Color(0xFFA2A2A2)),
+                            border: InputBorder.none, // Sin borde.
+                            isDense: true,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 12),
               Container(
-                height: 48,
-                width: 48,
+                height: 52,
+                width: 52,
                 decoration: BoxDecoration(
-                  color: Colors.orange[300],
+                  color: const Color(0xFFC67C4E),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(Icons.tune, color: Colors.white),
-              )
+                child: Center(
+                  child: Image.asset(
+                    'assets/filter.png', 
+                    width: 14.58,
+                    height: 13.25,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
             ],
-          )
+          ),
         ],
       ),
     );
   }
 
-  // Banner promocional.
   Widget _buildPromoBanner() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -80,45 +114,25 @@ class CatalogScreen extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           image: const DecorationImage(
-            image: AssetImage('assets/banner_coffe.png'), // Pon la imagen correcta.
+            image: AssetImage('assets/banner_coffe.png'),
             fit: BoxFit.cover,
           ),
         ),
-        child: Stack(
-          children: [
-            Positioned(
-              top: 8,
-              left: 8,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Text(
-                  'Promo',
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                ),
-              ),
+        child: const Center(
+          child: Text(
+            'Buy one get\none FREE',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
-            const Center(
-              child: Text(
-                'Buy one get\none FREE',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            )
-          ],
+          ),
         ),
       ),
     );
   }
 
-  // Filtro de categorías.
   Widget _buildCategories() {
     final categories = ['All Coffee', 'Macchiato', 'Latte', 'Americano'];
     return Container(
@@ -133,9 +147,9 @@ class CatalogScreen extends StatelessWidget {
           final isSelected = index == 0;
           return Chip(
             label: Text(categories[index]),
-            backgroundColor: isSelected ? Colors.orange : Colors.white,
+            backgroundColor: isSelected ? const Color(0xFFC67C4E) : Colors.white,
             labelStyle: TextStyle(
-              color: isSelected ? Colors.white : Colors.black,
+              color: isSelected ? Colors.white : const Color(0xFF313131),
               fontWeight: FontWeight.bold,
             ),
           );
@@ -144,7 +158,6 @@ class CatalogScreen extends StatelessWidget {
     );
   }
 
-  // Grid de productos.
   Widget _buildProductGrid() {
     return GridView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -161,7 +174,6 @@ class CatalogScreen extends StatelessWidget {
     );
   }
 
-  // Tarjeta de producto.
   Widget _buildProductCard() {
     return Container(
       decoration: BoxDecoration(
@@ -174,7 +186,7 @@ class CatalogScreen extends StatelessWidget {
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
             child: Image.asset(
-              'assets/coffeM.png', // Cambia por tus imágenes reales.
+              'assets/coffeM.png',
               fit: BoxFit.cover,
               height: 120,
               width: double.infinity,
@@ -199,7 +211,7 @@ class CatalogScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Icon(Icons.add, color: Colors.white),
-                    )
+                    ),
                   ],
                 )
               ],
@@ -210,12 +222,11 @@ class CatalogScreen extends StatelessWidget {
     );
   }
 
-  // Bottom Navigation Bar.
   Widget _buildBottomNavBar() {
     return BottomNavigationBar(
       currentIndex: 0,
-      selectedItemColor: Colors.orange,
-      unselectedItemColor: Colors.grey,
+      selectedItemColor: const Color(0xFFC67C4E),
+      unselectedItemColor: const Color(0xFFA2A2A2),
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
         BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: ''),
