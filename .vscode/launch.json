@@ -1,30 +1,10 @@
 {
     "version": "0.2.0",
     "configurations": [
-        
         {
-            "name": "pmsn2025",
+            "name": "Flutter",
             "request": "launch",
             "type": "dart"
-        },
-        {
-            "name": "pmsn2025 (profile mode)",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "pmsn2025 (release mode)",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
-        },
-        {
-            "name": "pmsn2025 (Flutter profile mode)",
-            "program": "lib/main.dart",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
         }
     ]
 }

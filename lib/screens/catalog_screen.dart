@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Importante para controlar el System UI.
 
 class CatalogScreen extends StatelessWidget {
   const CatalogScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF9F9F9),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Color(0xFF111111), // Fondo negro para la barra de estado.
+        statusBarIconBrightness: Brightness.light, // Iconos blancos.
+      ),
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF9F9F9),
 
-      body: SafeArea(
-        child: Column(
+        body: SafeArea(
+          child: Column(
           children: [
             _buildHeader(),
             _buildPromoBanner(),
@@ -18,14 +24,14 @@ class CatalogScreen extends StatelessWidget {
           ],
         ),
       ),
-
-      bottomNavigationBar: _buildBottomNavBar(),
+        bottomNavigationBar: _buildBottomNavBar(),
+      ),
     );
   }
 
   Widget _buildHeader() {
     return Container(
-      color: const Color(0xFF111111), // Fondo negro sólido para todo el header.
+      color: const Color(0xFF111111), // Fondo negro sólido.
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,10 +40,10 @@ class CatalogScreen extends StatelessWidget {
             "Location",
             style: TextStyle(
               fontSize: 12,
-              height: 14.4 / 12, 
+              height: 14.4 / 12,
               fontFamily: 'Sora',
               fontWeight: FontWeight.w400,
-              color: Color(0xFFA2A2A2), // Gris claro.
+              color: Color(0xFFA2A2A2),
               letterSpacing: 0.12,
             ),
           ),
@@ -48,7 +54,7 @@ class CatalogScreen extends StatelessWidget {
               height: 21 / 14,
               fontFamily: 'Sora',
               fontWeight: FontWeight.w600,
-              color: Color(0xFFD8D8D8), // Color blanco-gris claro.
+              color: Color(0xFFD8D8D8),
             ),
           ),
           const SizedBox(height: 16),
@@ -58,7 +64,7 @@ class CatalogScreen extends StatelessWidget {
                 child: Container(
                   height: 52,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF242424), // Fondo oscuro de la barra.
+                    color: const Color(0xFF242424),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -72,7 +78,7 @@ class CatalogScreen extends StatelessWidget {
                           decoration: InputDecoration(
                             hintText: "Search coffee",
                             hintStyle: const TextStyle(color: Color(0xFFA2A2A2)),
-                            border: InputBorder.none, // Sin borde.
+                            border: InputBorder.none,
                             isDense: true,
                           ),
                         ),
@@ -91,7 +97,7 @@ class CatalogScreen extends StatelessWidget {
                 ),
                 child: Center(
                   child: Image.asset(
-                    'assets/filter.png', 
+                    'assets/filter.png',
                     width: 14.58,
                     height: 13.25,
                     fit: BoxFit.contain,
@@ -104,34 +110,74 @@ class CatalogScreen extends StatelessWidget {
       ),
     );
   }
-
+  
   Widget _buildPromoBanner() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Container(
-        height: 120,
-        margin: const EdgeInsets.symmetric(horizontal: 16),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          image: const DecorationImage(
-            image: AssetImage('assets/banner_coffe.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: const Center(
-          child: Text(
-            'Buy one get\none FREE',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+  return Padding(
+    padding: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 16),
+    child: Stack(
+      clipBehavior: Clip.none, // Permite que el Promo se "desborde" hacia arriba.
+      children: [
+        // Imagen de fondo del banner.
+        Container(
+          height: 140, // Altura correcta de Figma.
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            image: const DecorationImage(
+              image: AssetImage('assets/banner_coffe.png'), // Asegúrate de que el nombre sea correcto.
+              fit: BoxFit.cover,
             ),
           ),
         ),
-      ),
-    );
-  }
+
+        // El texto "Promo" flotando arriba del banner.
+        Positioned(
+          top: 9, // Sale un poco hacia arriba.
+          left: 32,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+            decoration: BoxDecoration(
+              color: const Color(0xFFED5151),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: const Text(
+              'Promo',
+              style: TextStyle(
+                fontSize: 14,
+                fontFamily: 'Sora',
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+
+        // Texto principal "Buy one get one FREE"
+        Positioned(
+          bottom: 16,
+          left: 16,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.8), // Fondo negro con transparencia.
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: const Text(
+              'Buy one get\none FREE',
+              style: TextStyle(
+                fontSize: 20,
+                fontFamily: 'Sora',
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+                height: 1.2, // Ajuste fino al interlineado.
+              ),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 
   Widget _buildCategories() {
     final categories = ['All Coffee', 'Macchiato', 'Latte', 'Americano'];

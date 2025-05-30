@@ -13,7 +13,7 @@ class TodoModel {
       titleTodo: map['titleTodo'],
       descTodo: map['descTodo'],
       dateTodo: map['dateTodo'],
-      statusTodo: map['statusTodo']
+      statusTodo: false //map['statusTodo']
     );
   }
 }

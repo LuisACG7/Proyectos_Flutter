@@ -1,14 +1,15 @@
-2025/03/03-10:19:53.974 103a4 Reusing MANIFEST C:\Users\LuisA\AppData\Local\Temp\flutter_tools.cae81146\flutter_tools_chrome_device.2b0dbf75\Default\shared_proto_db/MANIFEST-000001
-2025/03/03-10:19:53.976 103a4 Recovering log #23
-2025/03/03-10:19:53.978 103a4 Reusing old log C:\Users\LuisA\AppData\Local\Temp\flutter_tools.cae81146\flutter_tools_chrome_device.2b0dbf75\Default\shared_proto_db/000023.log 
-2025/03/03-10:19:53.979 103a4 Delete type=0 #3
-2025/03/03-10:19:53.980 103a4 Delete type=0 #4
-2025/03/03-10:19:53.980 103a4 Delete type=0 #7
-2025/03/03-10:19:53.980 103a4 Delete type=2 #8
-2025/03/03-10:19:53.980 103a4 Delete type=0 #10
-2025/03/03-10:19:53.980 103a4 Delete type=2 #11
-2025/03/03-10:19:53.981 103a4 Delete type=0 #13
-2025/03/03-10:19:53.981 103a4 Delete type=2 #14
-2025/03/03-10:19:53.981 103a4 Delete type=0 #16
-2025/03/03-10:19:53.981 103a4 Delete type=2 #17
-2025/03/03-10:19:53.982 103a4 Delete type=0 #19
+2025/03/20-14:30:34.714 17028 Reusing MANIFEST C:\Users\LuisA\AppData\Local\Temp\flutter_tools.5c677b6a\flutter_tools_chrome_device.7efd0a79\Default\shared_proto_db/MANIFEST-000001
+2025/03/20-14:30:34.716 17028 Recovering log #26
+2025/03/20-14:30:34.719 17028 Reusing old log C:\Users\LuisA\AppData\Local\Temp\flutter_tools.5c677b6a\flutter_tools_chrome_device.7efd0a79\Default\shared_proto_db/000026.log 
+2025/03/20-14:30:34.720 17028 Delete type=0 #3
+2025/03/20-14:30:34.721 17028 Delete type=0 #4
+2025/03/20-14:30:34.721 17028 Delete type=0 #7
+2025/03/20-14:30:34.721 17028 Delete type=2 #8
+2025/03/20-14:30:34.721 17028 Delete type=0 #10
+2025/03/20-14:30:34.721 17028 Delete type=2 #11
+2025/03/20-14:30:34.721 17028 Delete type=0 #13
+2025/03/20-14:30:34.722 17028 Delete type=2 #14
+2025/03/20-14:30:34.722 17028 Delete type=0 #16
+2025/03/20-14:30:34.722 17028 Delete type=2 #17
+2025/03/20-14:30:34.722 17028 Delete type=0 #19
+2025/03/20-14:30:34.723 17028 Delete type=0 #23

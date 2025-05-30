@@ -2,6 +2,8 @@ import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pmsn2025/database/task_databa.dart';
+import 'package:pmsn2025/models/todo_model.dart';
+import 'package:pmsn2025/utils/global_values.dart';
 
 class TodoScreen extends StatefulWidget {
   const TodoScreen({super.key});
@@ -11,12 +13,11 @@ class TodoScreen extends StatefulWidget {
 }
 
 class _TodoScreenState extends State<TodoScreen> {
-
   TaskDatabase? database;
   TextEditingController conTitle = TextEditingController();
   TextEditingController conDesc = TextEditingController();
   TextEditingController conDate = TextEditingController();
-  TextEditingController conStatus= TextEditingController();
+  TextEditingController conStatus = TextEditingController();
 
   @override
   void initState() {
@@ -30,60 +31,93 @@ class _TodoScreenState extends State<TodoScreen> {
       appBar: AppBar(title: Text('TODO LIST'),),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add_task),
-        onPressed: ()=>_dialogBuilder(context)
+        onPressed: () => _dialogBuilder(context)
       ),
-      body: FutureBuilder(
-      future: database!.SELECT(),
-      builder: (context, snapshot) {
-        if( snapshot.hasError) {
-          return const Center(child: Text('Algo ocurrió durante la ejecución'),);
-          // Text(snapshot.error.toString());
-        }else {
-          if( snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                var obj = snapshot.data![index];
-                return Container(
-                  height: 150,
-                  child: Column(
-                    children: [
-                      ListTile(
-                        title: Text(obj.titleTodo!),
-                        subtitle: Text(obj.dateTodo!),
-                        trailing: Builder(builder: (context) {
-                          if(obj.statusTodo! ){
-                            return Icon(Icons.check);
-                          }else{
-                            return Icon(Icons.close);
-                          }
-                        }),
-                      ),
-                      Text(obj.descTodo!)
-                    ],
-                  ),
+      body: ValueListenableBuilder(
+        valueListenable: GlobalValues.updList,
+        builder: (context, value, widget) {
+          return FutureBuilder(
+            future: database!.SELECT(),
+            builder: (context, AsyncSnapshot<List<TodoModel>> snapshot) {
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text('Algo ocurrió durante la ejecución'),
                 );
-              },
-            );
-          }else {
-            return const Center(child: CircularProgressIndicator(),);
-          }
-        }
-      },
-    ),
+                // Text(snapshot.error.toString());
+              } else {
+                if (snapshot.hasData) {
+                  return ListView.separated(
+                    separatorBuilder: (context, index) => SizedBox(height: 10,),
+                    padding: EdgeInsets.all(10),
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      var obj = snapshot.data![index];
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Colors.greenAccent
+                        ),
+                        height: 150,
+                        child: Column(
+                          children: [
+                            ListTile(
+                              title: Text(obj.titleTodo!),
+                              subtitle: Text(obj.dateTodo!),
+                              trailing: Builder(builder: (context) {
+                                if (obj.statusTodo!) {
+                                  return Icon(Icons.check);
+                                } else {
+                                  return Icon(Icons.close);
+                                }
+                              }),
+                            ),
+                            Text(obj.descTodo!),
+                            Row(
+                              mainAxisAlignment:MainAxisAlignment.end, //spaceBetween
+                              children: [
+                                IconButton(onPressed: () {
+                                  conTitle.text = obj.titleTodo!;
+                                  conDesc.text = obj.descTodo!;
+                                  conDate.text = obj.dateTodo!;
+                                  conStatus.text = obj.statusTodo!.toString();
+
+                                  _dialogBuilder(context, obj.idTodo!);
+                                },icon: Icon(Icons.edit,size: 30,)),
+                                IconButton(onPressed: () {
+                                      database!.DELETE('todo', obj.idTodo!).then((value) {
+                                          if (value > 0) {
+                                            GlobalValues.updList.value =!GlobalValues.updList.value;
+                                          }
+                                        },
+                                      );
+                                    },
+                                    icon: Icon(Icons.delete,size: 30,))
+                              ],
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                } else {
+                  return const Center(child: CircularProgressIndicator(),);
+                }
+              }
+            },
+          );
+        },
+      ),
     );
   }
 
-  Future<void> _dialogBuilder(BuildContext context) {
+  Future<void> _dialogBuilder(BuildContext context, [int idTodo = 0]) {
     return showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-
-          title: Text('Add Task'),
+          title: idTodo == 0 ? Text('Add Task') : Text('Edit Task'),
           content: Container(
-            height: 280,
-            width: 300,
+            height: 300,
+            width: 310,
             child: ListView(
               shrinkWrap: true,
               children: [
@@ -94,22 +128,23 @@ class _TodoScreenState extends State<TodoScreen> {
                 TextFormField(
                   controller: conDesc,
                   maxLines: 3,
-                  decoration: InputDecoration(hintText: 'Descripción de la tarea'),
+                  decoration:
+                      InputDecoration(hintText: 'Descripción de la tarea'),
                 ),
                 TextFormField(
                   readOnly: true,
                   controller: conDate,
                   decoration: InputDecoration(hintText: 'Fecha de la tarea'),
-                  onTap: () async{
+                  onTap: () async {
                     DateTime? dateTodo = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2100)
-                    );
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100));
 
-                    if( dateTodo != null) {
-                      String formattedDate = DateFormat('yyyy-MM-dd').format(dateTodo);
+                    if (dateTodo != null) {
+                      String formattedDate =
+                          DateFormat('yyyy-MM-dd').format(dateTodo);
                       setState(() {
                         conDate.text = formattedDate;
                       });
@@ -122,32 +157,63 @@ class _TodoScreenState extends State<TodoScreen> {
                 ),
                 Divider(),
                 ElevatedButton(
-                  onPressed: (){
-                    database!.INSERT('todo', {
-                      'titleTodo' : conTitle.text,
-                      'descTodo' : conDesc.text,
-                      'dateTodo' : conDate.text,
-                      'statusTodo' : conStatus.text == 1 ? true : false
-                    }).then((value) {
-                      if( value > 0) {
-                        ArtSweetAlert.show(
-                          context: context,
-                          artDialogArgs: ArtDialogArgs(
-                            type: ArtSweetAlertType.success,
-                            title: 'Mensaje de la App',
-                            text: 'Datos insertados correctamente'
-                          )
-                        );
-                      }
-                    },);
-                  },
-                  child: Text('Guardar'))
+                    onPressed: () {
+                      if( idTodo == 0 ) {
+                        database!.INSERT('todo', {
+                        'titleTodo': conTitle.text,
+                        'descTodo': conDesc.text,
+                        'dateTodo': conDate.text,
+                        'statusTodo': false
+                      }).then(
+                        (value) {
+                          if (value > 0) {
+                            GlobalValues.updList.value =
+                                !GlobalValues.updList.value;
+                            ArtSweetAlert.show(
+                                context: context,
+                                artDialogArgs: ArtDialogArgs(
+                                    type: ArtSweetAlertType.success,
+                                    title: 'Mensaje de la App',
+                                    text: 'Datos insertados correctamente'));
+                          }
+                        },);
+                    }else{
+                      database!.UPDATE('todo', {
+                        'titleTodo': idTodo,
+                        'descTodo': conDesc.text,
+                        'dateTodo': conDate.text,
+                        'statusTodo': false
+                      }).then(
+                        (value) {
+                          if (value > 0) {
+                            GlobalValues.updList.value =
+                                !GlobalValues.updList.value;
+                            ArtSweetAlert.show(
+                                context: context,
+                                artDialogArgs: ArtDialogArgs(
+                                    type: ArtSweetAlertType.success,
+                                    title: 'Mensaje de la App',
+                                    text: 'Datos actualizados correctamente'
+                                  )
+                                );
+                          }
+                        },
+                      );
+
+                    }
+                      
+                      conTitle.text = '';
+                      conDesc.text = '';
+                      conDate.text = '';
+                      conStatus.text = '';
+                      Navigator.pop(context);
+                    },
+                    child: Text('Guardar'))
               ],
             ),
           ),
         );
       },
-    ); 
+    );
   }
-
 }
